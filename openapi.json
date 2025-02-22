@@ -1,0 +1,154 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Product Service API",
+      "version": "0.0.1",
+      "description": "API documentation for the Product Service, providing endpoints to list products and retrieve a product by its id."
+    },
+    "paths": {
+      "/product": {
+        "get": {
+          "summary": "Retrieve product list",
+          "description": "Returns a list of products.",
+          "responses": {
+            "200": {
+              "description": "A list of products",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Product"
+                    }
+                  },
+                  "examples": {
+                    "example-1": {
+                      "value": [
+                        {
+                          "id": "1",
+                          "title": "Product #1",
+                          "description": "Product with attractive price #1 (Nice)",
+                          "price": 69
+                        },
+                        {
+                          "id": "2",
+                          "title": "Product #2",
+                          "description": "Product with comically large price",
+                          "price": 420
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/products/{productId}": {
+        "get": {
+          "summary": "Retrieve product by ID",
+          "description": "Returns details for a specific product identified by productId.",
+          "parameters": [
+            {
+              "name": "productId",
+              "in": "path",
+              "description": "ID of the product to retrieve",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Returns product with specified productId",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Product"
+                  },
+                  "examples": {
+                    "example-1": {
+                      "value": {
+                        "id": "1",
+                        "title": "Product #1",
+                        "description": "Product with attractive price #1 (Nice)",
+                        "price": 69
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request, missing productId",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "examples": {
+                    "example-1": {
+                      "value": {
+                        "error": "ProductId is required"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Product not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  },
+                  "examples": {
+                    "example-1": {
+                      "value": {
+                        "error": "Product with id 3 not found!"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Product": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "price": {
+              "type": "number"
+            }
+          },
+          "required": ["id", "title", "description", "price"]
+        },
+        "Error": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "example": "Error message"
+            }
+          },
+          "required": ["error"]
+        }
+      }
+    }
+  }
