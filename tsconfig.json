@@ -22,7 +22,11 @@
     "strictPropertyInitialization": false,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "/opt/nodejs/uuid-utils": ["src/layers/uuid-utils/nodejs/uuid-utils"],
+    },
   },
   "exclude": [
     "node_modules",

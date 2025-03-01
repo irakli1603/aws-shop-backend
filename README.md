@@ -1,15 +1,29 @@
 # Task 3 (First API with AWS API Gateway and AWS Lambda)
 
-This is a Product Service implemented with AWS API Gateway and Lambda functions `getProductByIdLambda` and `getProductListLambda` (See [Task 3](https://github.com/rolling-scopes-school/aws/blob/main/aws-developer/03_serverless_api/task.md))
+This is a Product Service implemented with AWS API Gateway and Lambda functions `getProductByIdLambda`, `getProductListLambda` and `createProductLambda` using `DynamoDB` as Database for tables `product` and `stock` (See [Task 4](https://github.com/rolling-scopes-school/aws/blob/main/aws-developer/04_integration_with_nosql_database/task.md))
 
-- API usage is described in `openapi.json` placed in root folder. (Just copy paste this json in [Swagger Editor](https://editor.swagger.io/) tool online to view it)
-- Basic unit tests for lambdas can be found in `test` dir. Run script `npm run test` to perform jest unit tests.
-- Both lambdas currently have in-memory hardcoded mock data for display.
-- Main error scenarios for `getProductById` are implemented. (e.g. not providing productId or providing non-exsiting productId)
+To create a Product, you must make a POST request to the URL below with the following body json data: 
+- title - text, not null
+- description - text
+- price - integer
+- count - integer
+e.g
+```json
+{
+  title: 'Product Title',
+  description: 'This product ...',
+  price: 200,
+  count: 2
+}
+```
 
 Exsposed endpoint URL:
-- https://i6ok5isnzd.execute-api.eu-central-1.amazonaws.com/prod/products handled by `getProductListLambda`
-- https://i6ok5isnzd.execute-api.eu-central-1.amazonaws.com/prod/products/{productId} handled by `getProductByIdLambda`
+- GET https://1vleujqwhb.execute-api.eu-central-1.amazonaws.com/prod/products handled by `getProductListLambda`
+- POST https://1vleujqwhb.execute-api.eu-central-1.amazonaws.com/prod/products handled by `createProductByIdLambda`
+- GET https://1vleujqwhb.execute-api.eu-central-1.amazonaws.com/prod/products/{productId} handled by `getProductByIdLambda`
+
+FE URL
+- https://dk03xi1yghc1x.cloudfront.net/
 
 
 ## Useful commands
