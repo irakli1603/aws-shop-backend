@@ -6,6 +6,7 @@ import { Construct } from 'constructs';
 import { Bucket, EventType, HttpMethods } from 'aws-cdk-lib/aws-s3'
 import { RestApi, LambdaIntegration } from 'aws-cdk-lib/aws-apigateway';
 import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 export class ImportServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -54,13 +55,23 @@ export class ImportServiceStack extends cdk.Stack {
         externalModules: ['aws-cdk', 'csv-parser']
       },
       environment: {
-        BUCKET_NAME: bucket.bucketName
+        BUCKET_NAME: bucket.bucketName,
+        SQS_QUEUE_NAME: 'catalogItemsQueue'
       },
       layers: [csvParserLayer]
     })
 
+
+
     bucket.grantWrite(importProductFileLambda);
     bucket.grantReadWrite(importFileParserLambda);
+
+    importFileParserLambda.addToRolePolicy(new PolicyStatement({
+      actions: ['sqs:GetQueueUrl', 'sqs:SendMessage'],
+      resources: [
+        `arn:aws:sqs:${cdk.Stack.of(this).region}:${cdk.Stack.of(this).account}:catalogItemsQueue`
+      ]
+    }))
 
     const importApi = new RestApi(this, 'ImportProductsApi', {
       restApiName: 'Import Service Api',
